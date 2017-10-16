@@ -6,7 +6,7 @@
 
 软件安装方法：
 
-1、首先获得hosts文件的读写权限，最简单的方法是执行命令：sudo chmod 777 /etc/hosts 如果觉得这种方法不安全，可       以将本py文件所有者改为root，然后给本文件加上setuid标志。
+1、首先获得hosts文件的读写权限，最简单的方法是执行命令：sudo chmod 777 /etc/hosts 如果觉得这种方法不安全，可 以将本py文件所有者改为root，然后给本文件加上setuid标志。
 
 2、安装python3的tkinter模块，命令： sudo apt-get install python3-tk
 
@@ -14,4 +14,8 @@
 
 4、成功，以后可以从启动器打开
 
-![](/home/ding/Desktop/深度截图_选择区域_20170714001854.png?nocache2650=1508173524464)
+![](pictures/1.png)  
+
+![](pictures/2.png)  
+
+![](pictures/0.gif)
