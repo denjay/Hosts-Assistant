@@ -16,7 +16,7 @@
 
 2、安装python3的tkinter模块，命令： sudo apt-get install python3-tk
 
-3、打开终端，在终端中输入命令：python3 绝对路径/Hosts助手.py （注意！一定要是绝对路径）
+3、打开终端，在终端中输入命令：python3 路径/Hosts助手.py
 
 4、成功，以后可以从启动器打开
 

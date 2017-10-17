@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """
 由于hosts文件经常失效，手动改hosts还是挺麻烦的，所以写了这个软件。
 这是我学Python没多久时写的，所以代码质量可能一般般。
@@ -5,11 +7,10 @@
 1、首先获得hosts文件的读写权限，最简单的方法是执行命令：sudo chmod 777 /etc/hosts
    如果觉得这种方法不安全，可以将本py文件所有者改为root，然后给本文件加上setuid标志。
 2、安装python3的tkinter模块，命令： sudo apt-get install python3-tk
-3、打开终端，在终端中输入命令：python3  绝对路径/Hosts助手.py  （注意！一定要是绝对路径）
+3、打开终端，在终端中输入命令：python3  路径/Hosts助手.py
 4、成功，以后可以从启动器打开
 """
 
-# !/usr/bin/python3
 from multiprocessing import Process, Queue
 import tkinter as tk
 import pickle
@@ -154,15 +155,15 @@ Encoding=UTF-8
 Name=Hosts助手
 StartupWMClass=Tk
 Comment=帮助更新Hosts文件
-Exec=python3 "{}"
-Icon = "{}"
+Exec=python3 {}
+Icon = {}
 Categories=Application;
 Version={}
 Type=Application
 Terminal=false
 """.format(os.path.realpath(__file__), sys.path[0] + '/ICON.png', self.version)
             path = os.environ['HOME'] + \
-                   '/.local/share/applications/' + 'Hosts_assistant.desktop'
+                '/.local/share/applications/Hosts_assistant.desktop'
             with open(path, 'w+') as f:
                 f.write(content)
 
@@ -261,9 +262,7 @@ fi"""
         """切换皮肤"""
         self.skin = (self.skin + 1) % len(self.skins)
         self.root.destroy()
-        print(os.path.realpath(__file__))
         os.system('python3 "{}"'.format(os.path.realpath(__file__)))
-        print('到此一游')
 
     def ui(self):
         """启动软件主界面"""
