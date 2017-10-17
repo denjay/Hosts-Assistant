@@ -20,8 +20,8 @@
 
 4、成功，以后可以从启动器打开
 
-![](pictures/1.png)  
+![](images/1.png)  
 
-![](pictures/2.png)  
+![](images/2.png)  
 
-![](pictures/0.gif)
+![](images/0.gif)
