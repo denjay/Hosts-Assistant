@@ -9,7 +9,7 @@
 4、成功，以后可以从启动器打开
 """
 
-#!/usr/bin/python3
+# !/usr/bin/python3
 from multiprocessing import Process, Queue
 import tkinter as tk
 import pickle
@@ -23,7 +23,7 @@ import requests
 
 
 class Entry(object):
-    '''文本框类'''
+    """文本框类"""
 
     def __init__(self, n, root, skins, skin):
         self.url = tk.StringVar()
@@ -48,7 +48,7 @@ class Entry(object):
 
 class HOSTS(object):
     def __init__(self):
-        '''给软件设置初始参数'''
+        """给软件设置初始参数"""
         self.version = 1.0
         self.x = 0
         self.y = 0
@@ -66,7 +66,7 @@ class HOSTS(object):
         self.label = None
 
     def set_hosts(self, n, q, flag):
-        '''更新hosts操作的子进程'''
+        """更新hosts操作的子进程"""
         print('子进程开始')
         with open('/etc/hosts', 'w+') as f:
             if len(self.urls[n]) == 0:
@@ -90,7 +90,7 @@ class HOSTS(object):
                         q.put({str(n): 2})
 
     def update_hosts(self):
-        '''更新hosts操作的主进程'''
+        """更新hosts操作的主进程"""
         if len(sys.argv) == 1:  # 判断是以后台运行还是带界面
             self.urls = [e.get_content() for e in self.entry]
             if re.match(r'^\s*$', ''.join(self.urls)):
@@ -138,9 +138,9 @@ class HOSTS(object):
                 exit()
 
     def get_config(self):
-        '''如果有配置文件，就从配置文件获取配置，否则创建配置文件'''
-        if os.path.exists(os.path.dirname(__file__) + '/config.pkl'):
-            with open(os.path.dirname(__file__) + '/config.pkl', 'rb') as config:
+        """如果有配置文件，就从配置文件获取配置，否则创建配置文件"""
+        if os.path.exists(sys.path[0] + '/config.pkl'):
+            with open(sys.path[0] + '/config.pkl', 'rb') as config:
                 dic = pickle.load(config)
             self.auto = dic.get('auto')
             self.urls = dic.get('urls')
@@ -149,66 +149,67 @@ class HOSTS(object):
             self.y = dic.get('y')
         else:
             # 启动器图标所需内容,下面StartupWMClass作用是让任务栏只有一个图标，即使在任务栏创建了图标
-            content = '''[Desktop Entry]
+            content = """[Desktop Entry]
 Encoding=UTF-8
 Name=Hosts助手
 StartupWMClass=Tk
 Comment=帮助更新Hosts文件
-Exec=python3 {}
-Icon={}
+Exec=python3 "{}"
+Icon = "{}"
 Categories=Application;
 Version={}
 Type=Application
 Terminal=false
-'''.format(sys.argv[0], os.path.dirname(__file__) + '/ICON.png', self.version)
+""".format(os.path.realpath(__file__), sys.path[0] + '/ICON.png', self.version)
             path = os.environ['HOME'] + \
-                '/.local/share/applications/' + 'Hosts_assistant.desktop'
+                   '/.local/share/applications/' + 'Hosts_assistant.desktop'
             with open(path, 'w+') as f:
                 f.write(content)
 
             # 创建run.sh脚本
-            command = '''#!/bin/sh
+            command = """#!/bin/sh
 if [ -e {0} ]; then
     sleep 1m
-    python3 {0} 1
+    python3 "{0}" 1
 fi
-            '''.format(sys.argv[0])
-            with open(os.path.dirname(__file__) + '/run.sh', 'w+') as f:
+            """.format(os.path.realpath(__file__))
+            with open(sys.path[0] + '/run.sh', 'w+') as f:
                 f.write(command)
 
             # 保存原始hosts文件
             with open('/etc/hosts', 'r') as f:
                 raw_hosts = f.read()
-            with open(os.path.dirname(__file__) + '/raw_hosts.pkl', 'wb') as f:
+            with open(sys.path[0] + '/raw_hosts.pkl', 'wb') as f:
                 pickle.dump(raw_hosts, f)
 
     def save_config(self, e):
-        '''保存配置到配置文件'''
+        """保存配置到配置文件"""
         self.x = self.root.winfo_x()
         self.y = self.root.winfo_y() - 28
         self.urls = [e.get_content() for e in self.entry]
         dic = {'auto': self.auto, 'urls': self.urls,
                'skin': self.skin, 'x': self.x, 'y': self.y}
-        with open(os.path.dirname(__file__) + '/config.pkl', 'wb') as config:
+        with open(sys.path[0] + '/config.pkl', 'wb') as config:
             pickle.dump(dic, config)
 
     def restore_hosts(self):
-        '''将hosts文件重置到原始'''
-        with open(os.path.dirname(__file__) + '/raw_hosts.pkl', 'rb') as config:
+        """将hosts文件重置到原始"""
+        with open(sys.path[0] + '/raw_hosts.pkl', 'rb') as config:
             raw_hosts = pickle.load(config)
         with open('/etc/hosts', 'w+') as f:
             f.write(raw_hosts)
         self.label.config(text='hosts已经还原到最初！')
 
     def restore_urls(self):
-        '''将url列表重置为默认'''
+        """将url列表重置为默认"""
         for n in range(4):
             self.entry[n].set_content(self.raw_urls[n])
             self.entry[n].set_fg(self.skins[self.skin][3])
         self.label.config(text='地址重置成功！')
 
     def dialog(self):
-        '''显示软件说明'''
+        """显示软件说明"""
+
         def close_dialog(e):
             dialog.destroy()
 
@@ -219,7 +220,7 @@ fi
         dialog["background"] = self.skins[self.skin][0]
         dialog.resizable(False, False)
         dialog.wm_attributes('-topmost', 1)
-        content = '''    软件：Hosts助手    软件版本：{}     作者：杰哥
+        content = """    软件：Hosts助手    软件版本：{}     作者：杰哥
     说明：hosts文件源来自互联网，本人不保证安全，可自行修改。
     如果修改后发现有问题，可以点击还原hosts按钮，还原到最初。
     替换hosts文件后可能不会立即生效，可以关闭/开启网络，或
@@ -227,7 +228,7 @@ fi
     开机自启表示软件会在开机时在后台启动并自动更新hosts，直
     到成功。软件选择地址列表中连接最快的作为源文件，各源内容
     不相同。更新hosts完成后，地址显示红色的表示超时或者失效，
-    显示绿色的表示最终的hosts文件来源。'''
+    显示绿色的表示最终的hosts文件来源。"""
         sub_label = tk.Label(dialog, text=content.format(self.version),
                              justify=tk.LEFT, anchor=tk.W, fg=self.skins[self.skin][3], relief=tk.FLAT,
                              highlightthickness=0.4, bg=self.skins[self.skin][0], width=51, height=10)
@@ -235,14 +236,14 @@ fi
         sub_label.pack()
 
     def auto_starts(self):
-        '''设置是否开机启动，自动更新'''
+        """设置是否开机启动，自动更新"""
         PATH = os.environ['HOME'] + '/.profile'
-        content = '''
+        content = """
 # For Hosts assistant
-if [ -e {0} ]; then
+if [ -e "{0}" ]; then
     . {0} &
-fi'''
-        script = content.format(os.path.dirname(__file__) + '/run.sh')
+fi"""
+        script = content.format(sys.path[0] + '/run.sh')
         if self.auto == 0:
             self.auto = 1
             with open(PATH, 'a') as f:
@@ -257,17 +258,19 @@ fi'''
         self.button_list[3]['text'] = ('开机自启', '取消自启')[self.auto]
 
     def change_skin(self):
-        '''切换皮肤'''
+        """切换皮肤"""
         self.skin = (self.skin + 1) % len(self.skins)
         self.root.destroy()
-        os.system('python3 {}'.format(sys.argv[0]))
+        print(os.path.realpath(__file__))
+        os.system('python3 "{}"'.format(os.path.realpath(__file__)))
+        print('到此一游')
 
     def ui(self):
-        '''启动软件主界面'''
+        """启动软件主界面"""
         self.root = tk.Tk()
         self.root.title('Hosts助手')
 
-        img = tk.PhotoImage(file=os.path.dirname(__file__) + '/ICON.png')
+        img = tk.PhotoImage(file=sys.path[0] + '/ICON.png')
         self.root.tk.call('wm', 'iconphoto', self.root._w, img)
 
         if self.x == self.y == 0:
@@ -307,7 +310,7 @@ fi'''
         self.root.mainloop()
 
     def start(self):
-        '''开始执行，根据命令行参数，决定是后台执行还是启动界面'''
+        """开始执行，根据命令行参数，决定是后台执行还是启动界面"""
         self.get_config()
         if len(sys.argv) == 1:
             self.ui()
